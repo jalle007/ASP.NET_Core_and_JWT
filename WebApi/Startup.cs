@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApi
 {
@@ -26,8 +27,16 @@ namespace WebApi
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
+      services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+      {
+        Version = "v1",
+        Title = "ASP.NET Core 2.2 - JWT Authentication API",
+        Description = "ASP.NET Core 2.2 - JWT Authentication API.",
+        }
+      ));
+
+      // configure strongly typed settings objects
+      var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
             // configure jwt authentication
@@ -68,6 +77,12 @@ namespace WebApi
             app.UseAuthentication();
             
             app.UseMvc();
-        }
+            app.UseSwagger();
+            app.UseSwaggerUI(s=> {
+              s.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API");
+
+            });
+
+    }
     }
 }

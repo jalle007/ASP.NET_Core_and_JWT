@@ -43,7 +43,6 @@ namespace WebApi.Controllers
     [HttpGet("test")]
     public IActionResult Test()
     {
-
       return Ok();
     }
 
